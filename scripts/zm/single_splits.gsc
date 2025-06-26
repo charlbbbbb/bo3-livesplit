@@ -400,7 +400,7 @@ function WaitFireEnter()
 
 function WaitLightningCraft()
 {
-    WaitStaffCraft("lightning");
+    WaitStaffCraft("Lightning");
 }
 
 function WaitIceLeave()
@@ -410,12 +410,22 @@ function WaitIceLeave()
 
 function WaitUpgrade()
 {
-    WaitTombTP("Wind");
+    if (GetDvarInt("origins_23", 0)) {
+        WaitTombTP("Wind Enter");
+    }
+    else {
+        WaitTombTP("Lightning");
+    }
 }
 
 function WaitKills()
 {
-    WaitTombTP("Wind Enter");
+    if (GetDvarInt("origins_23", 0)) {
+        WaitTombTP("Wind Enter");
+    }
+    else {
+        WaitTombTP("Lightning Enter");
+    }
 }
 
 function WaitTombEnd()

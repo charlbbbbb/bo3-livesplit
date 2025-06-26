@@ -197,6 +197,7 @@ function onPlayerConnect()
 	SetDvar("sv_cheats", 1);
     SetDvar("scr_firstGumFree", 1);
 	SetDvar("zm_private_rankedmatch", 1);
+	SetDvar("origins_23", 0);
     level.onlinegame = true;
     level.rankedmatch = 1;
 
@@ -222,6 +223,7 @@ function anti_splice()
 // CBA to functionalise right now
 function show_watermarks()
 {
+	helpers::WaitFadeIn();
 	// Camos
 	wm_hud = timers::bottom_right_hud(0, 0, 1);
 	wm_hud SetText("^7Camos by ^1Keep3rs");
@@ -232,7 +234,6 @@ function show_watermarks()
 	wait 2;
 	wm_hud Destroy();
 	// Autosplits
-	helpers::WaitFadeIn();
 	wm_hud = timers::bottom_right_hud(0, 0, 1);
 	wm_hud SetText("^7Livesplit Autosplits by ^5cbrnn");
 	wm_hud SetTypewriterFX(50, 150000, 0.1);
