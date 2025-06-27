@@ -263,6 +263,7 @@ function onPlayerSpawned()
 			break;
 		case "zm_factory":
 			level.level_split_info = map_splits::FactorySplits();
+			break;
 		case "zm_castle":
 			thread single_splits::MonitorDETeleporters();
 			level.level_split_info = map_splits::CastleSplits();
