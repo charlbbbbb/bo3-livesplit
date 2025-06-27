@@ -74,6 +74,7 @@
 #using scripts\zm\gametypes\_weaponobjects;
 
 #using scripts\zm\map_splits;
+#using scripts\zm\single_splits;
 #using scripts\zm\timers;
 #using scripts\zm\helpers;
 
@@ -197,7 +198,6 @@ function onPlayerConnect()
 	SetDvar("sv_cheats", 1);
     SetDvar("scr_firstGumFree", 1);
 	SetDvar("zm_private_rankedmatch", 1);
-	SetDvar("origins_23", 0);
     level.onlinegame = true;
     level.rankedmatch = 1;
 
@@ -262,6 +262,7 @@ function onPlayerSpawned()
 			level.level_split_info = map_splits::ZodSplits();
 			break;
 		case "zm_castle":
+			thread single_splits::MonitorDETeleporters();
 			level.level_split_info = map_splits::CastleSplits();
 			break;
 		case "zm_island":

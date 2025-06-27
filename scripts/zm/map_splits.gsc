@@ -89,8 +89,8 @@ function GenesisSplits()
 
 function TombSplits()
 {
-    split_array = Array(&single_splits::WaitIceCraft, &single_splits::WaitFireEnter, &single_splits::WaitLightningCraft, &single_splits::WaitIceLeave, &single_splits::WaitUpgrade, &single_splits::WaitKills, &single_splits::WaitTombEnd);
-    split_name_array = Array("Ice Craft", "Fire Enter", "Lightning Craft", "Ice Leave", "Upgrade", "100 Kills", "Egg End");
+    split_array = Array(&single_splits::WaitIceCraft, &single_splits::WaitFireEnter, &single_splits::WaitLightningEnter, &single_splits::WaitLightningCraft, &single_splits::WaitIceLeave, &single_splits::WaitUpgrade, &single_splits::WaitKills, &single_splits::WaitTombEnd);
+    split_name_array = Array("Ice Craft", "Fire Enter", "Lightning Enter", "Lightning Craft", "Ice Leave", "Upgrade", "100 Kills", "Egg End");
     return Array(split_array, split_name_array);
 }
 

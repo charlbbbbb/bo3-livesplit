@@ -97,6 +97,40 @@ function WaitFlagPickup()
 }
 
 // DE
+function MonitorDETeleporters()
+{
+    var_a0cf8f2b = getentarray("trigger_teleport_pad", "targetname");
+    foreach(n_index, e_trig in var_a0cf8f2b)
+	{
+		e_trig thread WatchBackInTimeTeleportTrigger();
+        e_trig thread WatchAnyTeleportTrigger();
+	}
+}
+
+function WatchBackInTimeTeleportTrigger()
+{
+    for (;;) {
+        e_player = undefined;
+        self waittill("trigger", e_player);
+        if(zm_utility::is_player_valid(e_player) && !level.is_cooldown && !level flag::get("rocket_firing") && level flag::get("time_travel_teleporter_ready")) {
+            level notify("back_in_time");
+        };
+        wait 0.05;
+    }
+}
+
+function WatchAnyTeleportTrigger()
+{
+    for (;;) {
+        e_player = undefined;
+        self waittill("trigger", e_player);
+        if(zm_utility::is_player_valid(e_player) && !level.is_cooldown && !level flag::get("rocket_firing") && !level flag::get("time_travel_teleporter_ready")) {
+            level notify("standard_tp");
+        };
+        wait 0.05;
+    }
+}
+
 function WatchPlayerForBow()
 {
     level endon("bow_acquired");
@@ -118,31 +152,40 @@ function WaitBow()
     level waittill("bow_acquired");
 }
 
-function WaitAnyTP()
-{
-    for(;;)
-    {
-        if (level.players[0].b_teleporting==1) {
-            return;
-        }
-        wait 0.05;
-    }
-}
-
 function WaitCastleRocketTP()
 {
-    WaitAnyTP();
+    level waittill("standard_tp");
 }
 
 function WaitCastleFirstTP()
 {
-    for (;;){
-        wait 0.05;
-        if (!level flag::get("time_travel_teleporter_ready")) continue;
-        break;
-    }
-    WaitAnyTP();
+    level waittill("back_in_time");
 }
+// function WaitAnyTP()
+// {
+//     for(;;)
+//     {
+//         if (level.players[0].b_teleporting==1) {
+//             return;
+//         }
+//         wait 0.05;
+//     }
+// }
+
+// function WaitCastleRocketTP()
+// {
+//     WaitAnyTP();
+// }
+
+// function WaitCastleFirstTP()
+// {
+//     for (;;){
+//         wait 0.05;
+//         if (!level flag::get("time_travel_teleporter_ready")) continue;
+//         break;
+//     }
+//     WaitAnyTP();
+// }
 
 function WaitKeyPlaced()
 {
@@ -400,7 +443,7 @@ function WaitFireEnter()
 
 function WaitLightningCraft()
 {
-    WaitStaffCraft("Lightning");
+    WaitStaffCraft("lightning");
 }
 
 function WaitIceLeave()
@@ -408,24 +451,49 @@ function WaitIceLeave()
     WaitTombTP("Ice");
 }
 
+function WaitLightningEnter()
+{
+    WaitTombTP("Lightning Enter");
+}
+
+// Upgrade
+function WaitLightningUpgradeNotify()
+{
+    WaitTombTP("Lightning");
+    level notify("tomb_upgrade");
+}
+
+function WaitWindUpgradeNotify()
+{
+    WaitTombTP("Wind");
+    level notify("tomb_upgrade");
+}
+
 function WaitUpgrade()
 {
-    if (GetDvarInt("origins_23", 0)) {
-        WaitTombTP("Wind Enter");
-    }
-    else {
-        WaitTombTP("Lightning");
-    }
+    thread WaitLightningUpgradeNotify();
+    thread WaitWindUpgradeNotify();
+    level waittill("tomb_upgrade");
+}
+
+// Kills
+function WaitLightningKillsNotify()
+{
+    WaitTombTP("Lightning Enter");
+    level notify("tomb_kills");
+}
+
+function WaitWindKillsNotify()
+{
+    WaitTombTP("Wind Enter");
+    level notify("tomb_kills");
 }
 
 function WaitKills()
 {
-    if (GetDvarInt("origins_23", 0)) {
-        WaitTombTP("Wind Enter");
-    }
-    else {
-        WaitTombTP("Lightning Enter");
-    }
+    thread WaitLightningKillsNotify();
+    thread WaitWindKillsNotify();
+    level waittill("tomb_kills");
 }
 
 function WaitTombEnd()

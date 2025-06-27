@@ -71,11 +71,12 @@ startup
             {
                 {0, "Ice Craft"},
                 {1, "Fire Enter"},
-                {2, "Lightning Craft"},
-                {3, "Ice Leave"},
-                {4, "Upgrade"},
-                {5, "Fists"},
-                {6, "Origins Egg End"}
+		{2, "Lightning Enter"},
+                {3, "Lightning Craft"},
+                {4, "Ice Leave"},
+                {5, "Upgrade"},
+                {6, "Fists"},
+                {7, "Origins Egg End"}
             }
         },
 	{
