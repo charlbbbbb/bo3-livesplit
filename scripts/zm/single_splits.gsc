@@ -96,6 +96,12 @@ function WaitFlagPickup()
     }
 }
 
+// TG
+function WaitFactoryEnd()
+{
+    trigger::wait_till("flytrap_prize");
+}
+
 // DE
 function MonitorDETeleporters()
 {

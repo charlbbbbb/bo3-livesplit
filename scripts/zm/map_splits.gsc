@@ -59,6 +59,13 @@ function ZodSplits()
     return Array(split_array, split_name_array);
 }
 
+function FactorySplits()
+{
+    split_array = Array(&single_splits::WaitFactoryEnd);
+    split_name_array = Array("Egg End");
+    return Array(split_array, split_name_array);
+}
+
 function CastleSplits()
 {
     split_array = Array(&single_splits::WaitBow, &single_splits::WaitCastleRocketTP, &single_splits::WaitCastleFirstTP, &single_splits::WaitKeyPlaced, &single_splits::WaitBossEnter, &single_splits::WaitCastleEnd);

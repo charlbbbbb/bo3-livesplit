@@ -22,6 +22,12 @@ startup
                 {3, "SOE Egg End"}
             }
         },
+	{
+            "zm_factory", new Dictionary<int, string>()
+            {
+                {0, "The Giant Egg End"}
+            }
+        },
         {
             "zm_castle", new Dictionary<int, string>()
             {
