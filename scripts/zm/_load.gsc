@@ -10,7 +10,6 @@
 #using scripts\shared\fx_shared;
 #using scripts\shared\demo_shared;
 #using scripts\shared\hud_message_shared;
-#using scripts\shared\hud_shared;
 #using scripts\shared\load_shared;
 #using scripts\shared\lui_shared;
 #using scripts\shared\music_shared;
@@ -74,9 +73,6 @@
 #using scripts\zm\gametypes\_weaponobjects;
 
 #using scripts\zm\map_splits;
-#using scripts\zm\single_splits;
-#using scripts\zm\timers;
-#using scripts\zm\helpers;
 
 #precache( "fx", "_t6/bio/player/fx_footstep_dust" );
 #precache( "fx", "_t6/bio/player/fx_footstep_sand" );
@@ -174,10 +170,21 @@ function register_clientfields()
 	clientfield::register( "clientuimodel", "zmhud.swordChargeUpdate", VERSION_SHIP, 1, "counter" );
 }
 
+// Our scripts
+
 function autoexec entrypoint(){
+
+	// Basic Match Setup
+	SetDvar("sv_cheats", 1);
+    SetDvar("scr_firstGumFree", 1);
+	SetDvar("zm_private_rankedmatch", 1);
+    level.onlinegame = true;
+    level.rankedmatch = 1;
+
     callback::on_start_gametype(&init);
     callback::on_connect(&onPlayerConnect);
     callback::on_spawned(&onPlayerSpawned);
+
 }
 
 function init()
@@ -190,58 +197,14 @@ function init()
 	if (getDvarInt("show_splits")==0) ModVar("show_splits", 0);
 	SetDvar(level.split_count_dvar, 0);
 
+	// Custom PAP
+	if (GetDvarInt("pap_index")==0) ModVar("pap_index", 0);
+
 }
 
 function onPlayerConnect()
 {
-	// Basic Match Setup
-	SetDvar("sv_cheats", 1);
-    SetDvar("scr_firstGumFree", 1);
-	SetDvar("zm_private_rankedmatch", 1);
-    level.onlinegame = true;
-    level.rankedmatch = 1;
-
-	// Splits Watermark
-	show_watermarks();
-}
-
-function anti_splice()
-{
-	if (!isDefined(level.charset)) level.charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	random_str = "^7";
-    for (i = 0; i < 20; i++)
-    {
-        index = randomInt(level.charset.size);
-        random_str += level.charset[index];
-		wait 0.05;
-    }
-	splice_hud = timers::bottom_left_hud(0, 0, 0.3, 1);
-	splice_hud SetText(random_str);
-    
-}
-
-// CBA to functionalise right now
-function show_watermarks()
-{
-	helpers::WaitFadeIn();
-	// Camos
-	wm_hud = timers::bottom_right_hud(0, 0, 1);
-	wm_hud SetText("^7Camos by ^1Keep3rs");
-	wm_hud SetTypewriterFX(50, 150000, 0.1);
-	wait 2;
-	wm_hud FadeOverTime(2);
-	wm_hud.alpha = 0;
-	wait 2;
-	wm_hud Destroy();
-	// Autosplits
-	wm_hud = timers::bottom_right_hud(0, 0, 1);
-	wm_hud SetText("^7Livesplit Autosplits by ^5cbrnn");
-	wm_hud SetTypewriterFX(50, 150000, 0.1);
-	wait 2;
-	wm_hud FadeOverTime(2);
-	wm_hud.alpha = 0;
-	wait 2;
-	wm_hud Destroy();
+	return;
 }
 
 function onPlayerSpawned()
@@ -250,10 +213,7 @@ function onPlayerSpawned()
 	self endon( "disconnect" );
 
 	self.initialspawn = true;
-	// Anti Splice String (light)
-	anti_splice();
-	// Watermark
-	thread show_watermarks();
+
 	// Timer Logic
 	SetDvar(level.split_count_dvar, 0);
 	switch(level.script)
@@ -261,11 +221,7 @@ function onPlayerSpawned()
 		case "zm_zod": 
 			level.level_split_info = map_splits::ZodSplits();
 			break;
-		case "zm_factory":
-			level.level_split_info = map_splits::FactorySplits();
-			break;
 		case "zm_castle":
-			thread single_splits::MonitorDETeleporters();
 			level.level_split_info = map_splits::CastleSplits();
 			break;
 		case "zm_island":
@@ -280,10 +236,17 @@ function onPlayerSpawned()
 		case "zm_tomb": 
 			level.level_split_info = map_splits::TombSplits();
 			break;
-		case "zm_moon":
-			level.level_split_info = map_splits::MoonSplits();
 		default:
 			break;
 	}
+	// Set PAP index
+	if (GetDvarInt("pap_index")!=0) {
+		level.pack_a_punch_camo_index = GetDvarInt("pap_index");
+	}
+	// Run Splits
 	thread map_splits::RunSplitSetup(level.level_split_info);
+	// DEBUG
+	self.score = 10000;
+	self.bgb_pack = Array("zm_bgb_perkaholic", "zm_bgb_reign_drops", "zm_bgb_dead_of_nuclear_winter", "zm_bgb_anywhere_but_here", "zm_bgb_wall_power");
+	self.bgb_pack_randomized =  Array("zm_bgb_reign_drops", "zm_bgb_perkaholic", "zm_bgb_dead_of_nuclear_winter", "zm_bgb_wall_power", "zm_bgb_anywhere_but_here");
 }
