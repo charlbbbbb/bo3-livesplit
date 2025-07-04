@@ -290,6 +290,7 @@ function onPlayerSpawned()
 	// Set PAP index
 	if (GetDvarInt("pap_index")!=0) {
 		level.pack_a_punch_camo_index = GetDvarInt("pap_index");
+		level.pack_a_punch_camo_index_number_variants = 1;
 	}
 	// Run Splits
 	thread map_splits::RunSplitSetup(level.level_split_info);
